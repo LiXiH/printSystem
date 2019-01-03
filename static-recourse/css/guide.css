@@ -1,0 +1,109 @@
+body{
+    overflow-x:hidden;
+    font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,\\5FAE\8F6F\96C5\9ED1,Arial,sans-serif;
+    font-size: 12px;
+    line-height: 1.5
+}
+.content .title{
+    flex-grow: 0;
+    flex-basis: 48px;
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: stretch;
+    align-items: stretch;
+    align-items: center;
+    background-color: #1c66be;
+    color: #fff;
+    padding: 12px;
+    font-size: 16px!important;
+    font-weight: 600;
+}
+.background{
+    background: #ddd;
+}
+.layui-table, .layui-table-view{
+    margin-top: 0;
+    box-shadow: rgb(221, 221, 221) 1px 2px 4px;
+}
+.layui-table a{
+    color: #4a90e2;
+    cursor: pointer;
+}
+th{
+    color: #333;
+    background: #fff;
+}
+.layui-col-md9 .layui-table td, 
+.layui-col-md9 .layui-table th{
+    color: #657180;
+    font-size: 12px;
+}
+.layui-col-md9 .layui-table th{
+    font-weight: 600;
+}
+.layui-table tbody tr:hover,
+.layui-table tbody tr:hover{
+    background: #EBF7FF;
+}
+.detail{
+    padding: 30px;
+    border: 1px solid rgb(221, 221, 221);
+    box-shadow: rgb(221, 221, 221) 1px 2px 4px;
+    display: none;
+}
+
+.detail input{
+    border: 1px solid #1c66be;
+    color: #1c66be;
+    background-color: #fff;
+    width: 64px;
+    height: 28px;
+    border-radius: 4px;
+}
+.tb-center{
+    font-size: 18px;
+    font-weight: 700;
+    text-align: center;
+    color: #333;
+}
+.tb-hr{
+    width: 100%; 
+    height: 1px; 
+    background: rgb(0, 0, 0);
+    margin: 20px auto 40px auto;
+}
+.detail p{
+    text-justify: distribute;
+    text-align: justify ;
+    color: #333;
+}
+.detail1 span,
+.detail1 p{
+    font-size: 10.5pt;
+    font-family: 宋体;
+    color: #333;
+    font-weight: bolder;
+    line-height: 22.0pt;
+}
+.detail-service h3{
+    font-size: 16.0pt;
+    font-family: 黑体;
+    line-height: 21pt;
+    font-weight: 700;
+    text-align: center;
+}
+
+.detail-service span{
+    text-align: left;
+    text-indent: 21.0pt;
+    line-height: 21.0pt;
+}
+.show{
+    display: block !important;
+}
+.detail .detailshow{
+    display: none;
+}
+

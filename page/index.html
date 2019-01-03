@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../static-recourse/layui/layui.css" />
+    <link rel="stylesheet" href="../static-recourse/css/common.css" />
+    <title>印章网</title>
+</head>
+
+<body>
+    <div>
+        <div class="header">
+            <img src="../static-recourse/img/index.jpg" />
+            <div class="menu">
+                <ul>
+                    <li class="addBackground">
+                        <div data-src="./home.html">网站首页</a>
+                    </li>
+                    <li>
+                        <div id="onLinePrint">网上印章</a>
+                    </li>
+                    <li>
+                        <div data-src="./guide.html">办事指南</a>
+                    </li>
+                    <li>
+                        <div data-src="./query.html">印章查询</a>
+                    </li>
+                    <li>
+                        <div data-src="./unit.html">刻制经营单位</di>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="container" style="height: 100%;">
+            <iframe src="./home.html" id="container"  width="100%;" frameborder="0" onload="this.height=this.contentWindow.document.body.scrollHeight"></iframe>
+        </div>
+        <div class="footer">
+            <div class="footer-callUs layui-row">
+                <div class="layui-col-md6">
+                    <h2>联系我们</h2>
+                    <p>东华宏泰有限公司</p>
+                    <p>公司地址：浙江省杭州市滨江区长河路隆和国际7楼</p>
+                    <p>工作时间：周一至周五 8：30-5：30</p>
+                </div>
+                <div class="layui-col-md2">
+                    <img src="../static-recourse/img/chuanzhen.png" />
+                    <p>传真</p>
+                    <p>0571-81903062</p>
+                </div>
+                <div class="layui-col-md2">
+                    <img src="../static-recourse/img/phone.png" />
+                    <p>电话</p>
+                    <p>0571-81903062</p>
+                </div>
+                <div class="layui-col-md2 gongzhonghao">
+                    <img src="../static-recourse/img/gongzhonghao.jpg" />
+                    <p>微信公众号</p>
+                </div>
+            </div>
+            <div class="footer-login layui-row">
+                <div class="layui-col-md10">
+                    <h4>管理平台登录：
+                        <a>印章刻企登录</a>
+                        <a>系统后台登录</a>
+                    </h4>
+                    <p>
+                        友情链接：
+                        <a target="_blank" href="http://www.hzscjg.gov.cn/">杭州市市场监督管理局</a>
+                        <a target="_blank" href="http://www.gzw.xin">公章网</a>
+                    </p>
+                    <div>
+                        <a target="_blank" href="http://www.miitbeian.gov.cn/">浙ICP备13033876号-2</a>
+                        <img src="../static-recourse/img/jinghui.png">
+                        <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33010602009338">浙公网安备
+                            33010602009338号</a>
+                        <span>东华宏泰有限公司主板</span>
+                        <span>数据来源于杭州印章治安管理信息系统</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script src="../static-recourse/js/jquery.min.js"></script>
+<script src="../static-recourse/layui/layui.js"></script>
+<script src="../static-recourse/js/common.js"></script>
+<script>
+    $(function () {
+        $(".menu li").click(function () {
+            $(this).addClass("addBackground").siblings('li').removeClass('addBackground');
+            var src = $(this).children("div").data("src");
+            if(src){
+                $("#container").attr("src",src+"?time="+new Date().getTime());
+            }
+        });
+        $("#onLinePrint").click(function () {
+            window.open('http://www.qingning99.cn');
+        })
+    });
+</script>

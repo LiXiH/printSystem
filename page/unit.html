@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="../static-recourse/eleTree/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../static-recourse/eleTree/eleTree/eleTree.css" media="all">
+    <script src="../static-recourse/js/jquery.min.js"></script>
+    <style>
+        html,body{
+            margin: 0 auto;
+            background-color: #fff;
+        }
+        .eleTree{
+            width: 350px;
+            height: 500px;
+            border: 1px solid #ccc;
+            overflow: hidden;
+            display: inline-block;
+        }
+        .ele5{
+            height: auto;
+            width: 79%;
+            height: 200px;
+            display: none;
+            position: absolute;
+            padding: 3px;
+            top:100%;
+            background-color: #fff;
+            z-index: 100;
+            overflow-y: scroll;
+        }
+        .title{
+            flex-grow: 0;
+            flex-basis: 48px;
+            display: -webkit-flex;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: stretch;
+            align-items: stretch;
+            align-items: center;
+            background-color: #1c66be;
+            color: #fff;
+            padding: 12px;
+            font-size: 16px!important;
+        }
+        .content{
+            height: 380px;
+            margin: 3px;
+            box-shadow: rgb(221, 221, 221) 0px 1px 10px;
+        }
+        .layui-form{
+            margin-top: 30px;
+        }
+        .layui-input{
+            width: 80%;
+        }
+        .layui-input:hover{
+            border-color: #5cadff;
+            outline: 0;
+            box-shadow: 0 0 0 2px rgba(51,153,255,.5);
+        }
+        .my-icon{
+            position: absolute;
+            left: 77%;
+            top: 20%;
+            font-size: 14px;
+            transform: rotate(90deg);
+            margin-left: 2px;
+        }
+        .my-icon-rotate{
+            transform: rotate(270deg);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <p class="title">刻制单位查询</p>
+        <div class="layui-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">请选择区域</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" required lay-verify="required" placeholder="请选择" readonly autocomplete="off" class="layui-input">
+                    <div class="eleTree ele5" lay-filter="data5"></div>
+                    <span class="eleTree-node-content-icon my-icon"><i class="layui-icon layui-icon-triangle-r"></i></span>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <script src="../static-recourse/eleTree/layui/layui.js"></script>
+    <script>
+        $(function () {
+            window.parent.document.getElementById('container').height = 384;
+            var data = getData().districtMenus;
+            $(".layui-input").click(function(){
+                $(".my-icon").toggleClass("my-icon-rotate");
+            });
+            //初始化省市区插件
+            layui.config({
+                base: "../static-recourse/eleTree/layui/lay/mymodules/"
+            }).use(['jquery', 'table', 'eleTree', 'code', 'form', 'slider'], function () {
+                var $ = layui.jquery;
+                var eleTree = layui.eleTree;
+                var table = layui.table;
+                var code = layui.code;
+                var form = layui.form;
+                var slider = layui.slider;
+                var el5;
+                $("[name='title']").on("click", function (e) {
+                    e.stopPropagation();
+                    if (!el5) {
+                        el5 = eleTree.render({
+                            elem: '.ele5',
+                            data: data,
+                            defaultExpandAll: false,
+                            expandOnClickNode: false,
+                            highlightCurrent: true,
+                        });
+                    }
+                    $(".ele5").toggle();
+                })
+                eleTree.on("nodeClick(data5)", function (d) {
+                    $("[name='title']").val(d.data.currentData.label)
+                    $(".ele5").hide();
+                })
+                $(document).on("click", function () {
+                    $(".ele5").hide();
+                })
+            });
+
+        });
+
+        function getData() {
+            var response;
+            $.ajax({
+                type: "get",
+                async: false,
+                url: "http://10.0.0.140:8083/portal/districtInfo",
+                success: function (res) {
+                    response = res.data;
+                }
+            });
+            return response;
+        }
+    </script>
+
+</body>
+
+</html>

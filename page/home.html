@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../static-recourse/css/home.css" />
+    <link rel="stylesheet" href="../static-recourse/layui/layui.css" />
+    <script src="../static-recourse/js/jquery.min.js"></script>
+    <title>网站首页</title>
+    <style>
+        .query .notFount{
+            display: none;
+        }
+        .unitList p a{
+            margin-bottom: -4px; 
+        }
+        .unitList ul li{
+            margin-left: 32px;
+            margin-right: 4px;
+        }
+        .unitList li p{
+            margin: 12px auto; 
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <div class="query">
+            <div class="title">
+            </div>
+            <h1>印章备案信息查询</h1>
+            <p>
+                <span>企业名称</span>
+                <input class="unitName" placeholder="支持模糊查询"/>
+                <input type="button" value="查询" id="search">
+                <p>
+                    <img src="../static-recourse/img/tanhao.png">
+                    <span>输入企业名称即可查询</span>
+                </p>
+                <p class="notFount">
+                    <img src="../static-recourse/img/tanhaoBlue.png">
+                    <span class="c-blue-2 f-16 f-700 m-l-8">查询不到您搜索的"a'f'd"相关单位信息，请重新检索</span>
+                </p>
+            </p>
+            <div class="unitList">
+                <p>
+                    <span style="margin-top: 60px;"></span>
+                    <a></a>
+                </p>
+                <ul>
+                </ul>
+            </div>
+        </div>
+        <div class="introduce">
+            <span class="introduce-title">网站介绍</span>
+            <div class="introduce-content layui-row">
+                <div class="layui-col-md3">
+                    <img src="../static-recourse/img/introduce.jpg">
+                </div>
+                <div class="layui-col-md9">
+                    <h1>公章刻制备案流程</h1>
+                    </br></br>
+                    <span>流程概述：</span>
+                    <p>收到短信提示的手机号码登录系统“网上刻章”——选择“工商推送”栏——选择“下单”</p>
+                    <span>一、涉及对象</span>
+                    <p>新设企业。（不包括变更、注销等其他情况）</p>
+                    <span>二、备案流程</span>
+                    <p style="text-indent: -24.0pt;">流程1</p>
+                    <p style="text-indent: -24.0pt;">（1）企业在市场监管部门取得营业执照后，市场监管部门将营业执照信息、法人、经办人姓名及身份证号推送至公安部门印章治安管理系统。</p>
+                    <p style="text-indent: -24.0pt;">（2）系统自动发送短信通知经办人或法人提示登录杭州印章网（所有刻章企业已入住，网址：www.hzyzw.com）在线选取刻章店，选取印材并付费下单（也可选择线下支付），系统将企业信息推送到被选刻章企业，印章刻制企业按照推送信息刻制公章并上传章模进行备案。</p>
+                    <p style="text-indent: -24.0pt;">（3）若经办人或法人要自行前往刻章企业取章，则只需携带本人身份证原件前往。刻章企业对其身份进行核查后交付公章。
+                        流程2</p>
+                    <p style="text-indent: -24.0pt;">（1）企业在市场监管部门取得营业执照。</p>
+                    <p style="text-indent: -24.0pt;">（2）市场监管部门还未将营业执照信息、法人、经办人姓名及身份证号推送至公安部门，企业便立即去刻章店刻制公章的则需上传营业执照原件、法人身份
+                        证原件及法人现场照片；若非法人前往则需上传营业执照原件、法人委托书、法人身份证原件、经办人身份证原件及经办人现场照片。</p>
+                    <span>三、系统改造</span>
+                    <p>工商推送情况下，印章治安管理系统（刻章店端）将关闭上传备案材料功能</p>
+                    <span>四、要求规定</span>
+                    <p>1、前往刻章企业刻章或取章的必须是企业法人或工商推送信息中的经办人，其余人员刻章企业将不准受理。</p>
+                    <p>2、刻章企业需主动协助不会上网或没有上网办理下单程序的企业。</p>
+                    <p>3、在工商推送前提下，刻章店不准收取任何材料，只需核对经办人或法人身份证原件信息。</p>
+                    </br>
+                    </br>
+                    </br>
+                    </br>
+                    </br>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script src="../static-recourse/js/jquery.min.js"></script>
+<script src="../static-recourse/js/common.js"></script>
+<script>
+    $(function () {
+        $("#search").click(function () {
+            window.parent.document.getElementById('container').height = 384;
+            $(".introduce").hide();
+            var url = "http://10.0.0.140:8083/portal/useInfo";
+            var unitName = $(".unitName").val();
+            var data = {
+                "name": unitName
+            };
+            //清空公司列表
+            $(".unitList ul").empty();
+            var response = getData(url, data).data;
+            if (response.hasOwnProperty("useInfo")) {
+                var units = response.useInfo;
+                if (units.length == 0) {
+                    $(".notFount span").html('查询不到您搜索的"' + unitName + '"相关单位信息，请重新检索');
+                    $(".notFount").show();
+                    $(".unitList").hide();
+                    window.parent.document.getElementById('container').height = 384;
+                    $(".query").css("height", 380);
+                } else {
+                    $(".notFount").hide();
+                    $(".unitList").show();
+                    $(".unitList span").html('查询到一下"' + unitName + '"相关单位信息（只显示20条）：')
+                    for (var i = 0; i < units.length; i++) {
+                        var str = "<li>";
+                        str += "<p>企业名称： " + units[i].name + "</p><p>统一编码： " + units[i].code +
+                            "</p><p>公司法人： " + units[i].legalName + "</p>";
+                        str += "<input type='button' value='查看'>";
+                        $(".unitList ul").append(str);
+                    }
+                    var he = getHeight();
+                    $(".query").css("height", he + 40);
+                }
+            }
+        });
+
+
+    })
+</script>
