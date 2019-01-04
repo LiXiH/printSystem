@@ -125,7 +125,8 @@ body{
 .unitList{
     display: none;
 }
-.unitList a{
+.unitList a,
+.unitInform a{
     display: block;
     height: 10px;
     background: rgb(28, 102, 190);
@@ -147,7 +148,8 @@ body{
     font-weight: bolder;
     padding-bottom: 20px;
 }
-.unitList li input[type="button"]{
+.unitList li input[type="button"],
+.unitInform input[type="button"]{
     border-radius: 5px;
     background-color: #fff;
     color: #1c66be;
@@ -156,3 +158,36 @@ body{
     margin: 30px 50px;
     padding-right: 10px;
 }
+.unitInform ul{
+    overflow: hidden;
+    list-style: none;
+    margin-top: 50px;
+    margin-left: 22px;
+    margin-bottom: 24px;
+}
+.unitInform .printInf li{
+    float: left;
+}
+.unitInform span{
+    font-size: 12px;
+}
+.unitInform h3{
+    text-align: left;
+    font-size: 16px;
+    font-weight: bolder;
+    color: #1c66be;
+    margin-top: -14px;
+    margin-left: 46px;
+}
+.unitInform p{
+    text-align: left;
+}
+.unitInform .unitInf li:first-child{
+    font-size: 16px;
+    font-weight: 700!important;
+    color: #000;
+}
+.unitInform .printInf li:nth-child(2){
+    margin-left: 20px;
+}
+

@@ -23,6 +23,27 @@
         .unitList li p{
             margin: 12px auto; 
         }
+        .unitInform .unitInf,
+        .unitInform .printInf{
+            margin-left: 50px;
+        }
+        .unitInform .unitInf p{
+            margin-top: 18px;
+            font-size: 12px;
+        }
+        .unitInform h3{
+            margin-top: 30px;
+        }
+        .unitInform .printList p{
+            margin-top: 20px;
+            font-size: 12px;
+        }
+        .unitInform input[type="button"]{
+            margin-bottom: -6px;
+        }
+        .unitInform{
+            display: none;
+        }
     </style>
 </head>
 
@@ -34,7 +55,7 @@
             <h1>印章备案信息查询</h1>
             <p>
                 <span>企业名称</span>
-                <input class="unitName" placeholder="支持模糊查询"/>
+                <input class="unitName" placeholder="支持模糊查询" />
                 <input type="button" value="查询" id="search">
                 <p>
                     <img src="../static-recourse/img/tanhao.png">
@@ -52,6 +73,27 @@
                 </p>
                 <ul>
                 </ul>
+            </div>
+            <div class="unitInform">
+                <input type="button" value="返回">
+                <h3>单位信息</h3>
+                <a></a>
+                <ul class="unitInf">
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                </ul>
+                <h3>印章信息</h3>
+                <a></a>
+                <div class="printList">
+                    <ul class="printInf">
+                        <li><img src="../static-recourse/img/seal.png" /></li>
+                        <li class="information">
+                            <p>印章名称：杭州路佳国际货运代理有限公司</p>
+                            <p>备案日期：2017-11-14</p>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
         <div class="introduce">
@@ -100,6 +142,7 @@
     $(function () {
         $("#search").click(function () {
             window.parent.document.getElementById('container').height = 384;
+            var height;
             $(".introduce").hide();
             var url = "http://10.0.0.140:8083/portal/useInfo";
             var unitName = $(".unitName").val();
@@ -120,20 +163,81 @@
                 } else {
                     $(".notFount").hide();
                     $(".unitList").show();
-                    $(".unitList span").html('查询到一下"' + unitName + '"相关单位信息（只显示20条）：')
+                    $(".unitList span").html('查询到以下"' + unitName + '"相关单位信息（只显示20条）：')
                     for (var i = 0; i < units.length; i++) {
-                        var str = "<li>";
-                        str += "<p>企业名称： " + units[i].name + "</p><p>统一编码： " + units[i].code +
-                            "</p><p>公司法人： " + units[i].legalName + "</p>";
-                        str += "<input type='button' value='查看'>";
-                        $(".unitList ul").append(str);
+                        if (i <= 20) {
+                            var str = "<li>";
+                            str += "<p>企业名称： " + units[i].name + "</p><p class='code'>统一编码： " + units[i]
+                                .code +
+                                "</p><p>公司法人： " + units[i].legalName + "</p>";
+                            str += "<input type='button' value='查看' data-code=" + units[i]
+                                .code + " /><input id=" + units[i].name + " data-date=" + units[i].foundDateFormat +
+                                " value=" + units[i].address + " type='hidden'>";
+                            $(".unitList ul").append(str);
+                        } else {
+                            break;
+                        }
                     }
-                    var he = getHeight();
-                    $(".query").css("height", he + 40);
                 }
+                height = getHeight();
+                $(".query").css("height", height + 40);
             }
+
+            //点击查看，查看详细信息
+            $(".unitList li [type='button']").click(function () {
+                $(".unitList").hide();
+                $(".unitInform").show();
+                var url = "http://10.0.0.133:8083/portal/sealInfo";
+                var code = $(this).data("code");
+                var date = $(this).next().data("date");
+                var address = $(this).next().val();
+                var name = $(this).next().attr("id");
+                //显示公司详细信息
+                $(".unitInf li").eq(0).html("<p>" + name + "</p>");
+                if (!date) {
+                    date = "暂无该信息";
+                }
+                if (!address) {
+                    address = "暂无该信息";
+                }
+                $(".unitInf li").eq(1).html("<p>成立日期：" + date + "</p>");
+                $(".unitInf li").eq(2).html("<p>地址：" + address + "</p>");
+                var data = {
+                    "code": code
+                };
+                //清空公司印章详情列表
+                $(".unitInform .printList").empty();
+                //显示公司公司印章详情列表
+                var response = getData(url, data).data.seal;
+                if (response.length > 0) {
+                    for (var i = 0; i < response.length; i++) {
+                        var printInf = "<ul class='printInf'>";
+                        printInf +=
+                            "<li><img src='../static-recourse/img/seal.png'/></li><li><p class='information'>印章名称：" +
+                            response[i].sealName + "</p>" +
+                            "<p>备案日期：" + response[i].recordDate + "</p>"
+                        "</li>"
+                        printInf += "</ul>"
+                        $(".unitInform .printList").append(printInf);
+                    }
+                } else {
+                    $(".unitInform .printList").html(
+                        "<ul class='printInf'><li><p style='font-size:16px;'>该公司暂无印章信息</p></li></ul>"
+                    );
+                }
+                var he = $(document).height();
+                window.parent.document.getElementById('container').height = he + 70;
+                $(".query").css("height", he);
+            });
+
+
+            //点击返回公司列表
+            $(".unitInform input").click(function () {
+                $(".unitList").show();
+                $(".unitInform").hide();
+                $(".query").css("height", height + 40);
+                window.parent.document.getElementById('container').height = height + 70;
+            });
         });
-
-
     })
 </script>

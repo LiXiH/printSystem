@@ -85,21 +85,25 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">请选择区域</label>
                 <div class="layui-input-block">
-                    <input type="text" name="title" required lay-verify="required" placeholder="请选择" readonly autocomplete="off" class="layui-input">
+                    <input type="text" name="title" required lay-verify="required" placeholder="请选择" readonly
+                        autocomplete="off" class="layui-input">
                     <div class="eleTree ele5" lay-filter="data5"></div>
                     <span class="eleTree-node-content-icon my-icon"><i class="layui-icon layui-icon-triangle-r"></i></span>
                 </div>
             </div>
         </div>
-        
+        <table id="units" lay-filter="test"></table>
     </div>
 
     <script src="../static-recourse/eleTree/layui/layui.js"></script>
     <script>
         $(function () {
             window.parent.document.getElementById('container').height = 384;
-            var data = getData().districtMenus;
-            $(".layui-input").click(function(){
+            //获取区域信息
+            var url = "http://10.0.0.140:8083/portal/districtInfo";
+            var data = getData(url).districtMenus;
+            var t_url;
+            $(".layui-input").click(function () {
                 $(".my-icon").toggleClass("my-icon-rotate");
             });
             //初始化省市区插件
@@ -129,20 +133,37 @@
                 eleTree.on("nodeClick(data5)", function (d) {
                     $("[name='title']").val(d.data.currentData.label)
                     $(".ele5").hide();
-                })
+                    var id = d.data.currentData.districtId;
+                    var t_url = "http://10.0.0.140:8083/portal/makeDepartmentInfo?districtId="+id;
+                    t_data = getData(t_url);
+                    console.log(t_data);
+                });
                 $(document).on("click", function () {
                     $(".ele5").hide();
-                })
+                });
             });
 
+            layui.use('table', function(){
+            var table = layui.table;
+                 table.render({
+                   elem: '#units',
+                   height: 312,
+                   url: t_url, //数据接口
+                   cols: [[ //表头
+                     {field: 'departmentName', title: '制作单位名称', width:80, fixed: 'left'},
+                     {field: 'departmentAddress', title: '地址', width:80},
+                     {field: 'telphone', title: '电话', width:80}
+                   ]]
+                });
+            });
         });
 
-        function getData() {
+        function getData(url) {
             var response;
             $.ajax({
                 type: "get",
                 async: false,
-                url: "http://10.0.0.140:8083/portal/districtInfo",
+                url: url,
                 success: function (res) {
                     response = res.data;
                 }
