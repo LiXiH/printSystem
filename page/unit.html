@@ -32,6 +32,7 @@
             background-color: #fff;
             z-index: 100;
             overflow-y: scroll;
+            margin-left: 8px;
         }
         .title{
             flex-grow: 0;
@@ -49,9 +50,10 @@
             font-size: 16px!important;
         }
         .content{
-            height: 380px;
+            min-height: 380px;
             margin: 3px;
             box-shadow: rgb(221, 221, 221) 0px 1px 10px;
+            padding-bottom: 20px;
         }
         .layui-form{
             margin-top: 30px;
@@ -64,6 +66,9 @@
             outline: 0;
             box-shadow: 0 0 0 2px rgba(51,153,255,.5);
         }
+        .layui-form-label{
+            margin-left: 8px;
+        }
         .my-icon{
             position: absolute;
             left: 77%;
@@ -74,6 +79,10 @@
         }
         .my-icon-rotate{
             transform: rotate(270deg);
+        }
+        .table{
+            width: 94%;
+            margin: 10px auto;
         }
     </style>
 </head>
@@ -92,13 +101,28 @@
                 </div>
             </div>
         </div>
-        <table id="units" lay-filter="test"></table>
+        <div class="table">
+            <table class="layui-table" >
+                <colgroup>
+                    <col width="150">
+                    <col width="150">
+                    <col width="150">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>制作单位名称</th>
+                        <th>制作单位地址</th>
+                        <th>制作单位电话</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
     </div>
 
     <script src="../static-recourse/eleTree/layui/layui.js"></script>
     <script>
         $(function () {
-            window.parent.document.getElementById('container').height = 384;
+            window.parent.document.getElementById('container').height = 420;
             //获取区域信息
             var url = "http://10.0.0.140:8083/portal/districtInfo";
             var data = getData(url).districtMenus;
@@ -130,34 +154,37 @@
                     }
                     $(".ele5").toggle();
                 })
+                //选择区域
                 eleTree.on("nodeClick(data5)", function (d) {
                     $("[name='title']").val(d.data.currentData.label)
+                    $(".layui-table tbody").empty();
                     $(".ele5").hide();
                     var id = d.data.currentData.districtId;
-                    var t_url = "http://10.0.0.140:8083/portal/makeDepartmentInfo?districtId="+id;
+                    var t_url = "http://10.0.0.140:8083/portal/makeDepartmentInfo?districtId=" + id;
                     t_data = getData(t_url);
-                    console.log(t_data);
+                    if(t_data.makeDepartment.length > 0){
+                        var tbody = "";
+                        for(var i=0;i<t_data.makeDepartment.length;i++){
+                           tbody += "<tr><td>"+t_data.makeDepartment[i].departmentName+"</td><td>"+
+                           t_data.makeDepartment[i].departmentAddressDetail+"</td><td>"+t_data.makeDepartment[i].telphone+"</td></tr>";
+                        }
+                        $(".layui-table").append(tbody);
+                         //初始化iframe的高度
+                        $("tbody").height();
+                        var height = $(document).height();
+                        window.parent.document.getElementById('container').height = height;
+                    }else{
+                        tbody +="<tr><td colspan='3' style='text-align:center;'>暂无数据</td></tr>";
+                        $(".layui-table").append(tbody);
+                        window.parent.document.getElementById('container').height = 420;
+                    }
+                   
                 });
                 $(document).on("click", function () {
                     $(".ele5").hide();
                 });
             });
-
-            layui.use('table', function(){
-            var table = layui.table;
-                 table.render({
-                   elem: '#units',
-                   height: 312,
-                   url: t_url, //数据接口
-                   cols: [[ //表头
-                     {field: 'departmentName', title: '制作单位名称', width:80, fixed: 'left'},
-                     {field: 'departmentAddress', title: '地址', width:80},
-                     {field: 'telphone', title: '电话', width:80}
-                   ]]
-                });
-            });
         });
-
         function getData(url) {
             var response;
             $.ajax({

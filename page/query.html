@@ -80,7 +80,7 @@
 <script src="../static-recourse/js/moment.js"></script>
 <script>
     $(function () {
-        window.parent.document.getElementById('container').height = 384;
+        window.parent.document.getElementById('container').height = 420;
         var height;
         $("#search").click(function () {
             var url = "http://10.0.0.140:8083/portal/useInfo";
@@ -104,11 +104,12 @@
                     $(".unitList").show();
                     $(".unitList span").html('查询到以下"' + unitName + '"相关单位信息（只显示20条）：')
                     for (var i = 0; i < units.length; i++) {
-                        if (i <= 20) {
+                        if (i < 20) {
                             var str = "<li>";
                             str += "<p>企业名称： " + units[i].name + "</p><p class='code'>统一编码： " + units[i]
                                 .code +
                                 "</p><p>公司法人： " + units[i].legalName + "</p>";
+                                
                             str += "<input type='button' value='查看' data-code=" + units[i]
                                 .code + " /><input id=" + units[i].name + " data-date=" + units[i].foundDateFormat +
                                 " value=" + units[i].address + " type='hidden'>";
@@ -163,7 +164,7 @@
                     $(".unitInform .printList").html("<ul class='printInf'><li><p style='font-size:16px;'>该公司暂无印章信息</p></li></ul>");
                 }
                 var he = $(document).height();
-                window.parent.document.getElementById('container').height = he + 70;
+                window.parent.document.getElementById('container').height = he + 20;
                 $(".query").css("height", he);
             });
         });
@@ -173,7 +174,7 @@
             $(".unitList").show();
             $(".unitInform").hide();
             $(".query").css("height", height + 40);
-            window.parent.document.getElementById('container').height = height+70;
+            window.parent.document.getElementById('container').height = height+60;
         });
     })
 </script>
