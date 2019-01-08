@@ -138,13 +138,16 @@
 </html>
 <script src="../static-recourse/js/jquery.min.js"></script>
 <script src="../static-recourse/js/common.js"></script>
+<script src="../static-recourse/js/config.js"></script>
+<script src="../static-recourse/js/moment.js"></script>
 <script>
     $(function () {
         $("#search").click(function () {
             window.parent.document.getElementById('container').height = 384;
             var height;
+            
             $(".introduce").hide();
-            var url = "http://10.0.0.140:8083/portal/useInfo";
+            var url = ip + "portal/useInfo";
             var unitName = $(".unitName").val();
             var data = {
                 "name": unitName
@@ -187,7 +190,7 @@
             $(".unitList li [type='button']").click(function () {
                 $(".unitList").hide();
                 $(".unitInform").show();
-                var url = "http://10.0.0.133:8083/portal/sealInfo";
+                var url = ip + "portal/sealInfo";
                 var code = $(this).data("code");
                 var date = $(this).next().data("date");
                 var address = $(this).next().val();
@@ -211,13 +214,19 @@
                 var response = getData(url, data).data.seal;
                 if (response.length > 0) {
                     for (var i = 0; i < response.length; i++) {
+                        var type;
+                        for(var j=0;j<seal_type.length;j++){
+                            if(response[i].sealTypeCode == seal_type[j].value){
+                                type = seal_type[j].name;
+                            }
+                        }
                         var printInf = "<ul class='printInf'>";
-                        printInf +=
-                            "<li><img src='../static-recourse/img/seal.png'/></li><li><p class='information'>印章名称：" +
+                            printInf +=
+                            "<li><img src='../static-recourse/img/seal.png' style='margin-top: 24px;'/></li><li><p class='information'>印章名称：" +
                             response[i].sealName + "</p>" +
-                            "<p>备案日期：" + response[i].recordDate + "</p>"
+                            "<p>备案日期：" + moment(response[i].recordDate).format('YYYY-MM-DD') + "</p><p>印章类型："+type+"</p><p>印章编码：<span id='text' class='text' data-type="+response[i].sealTypeCode+" data-code="+response[i].sealCode+"> 点击核对 </span></p>"
                         "</li>"
-                        printInf += "</ul>"
+                        printInf += "<li style='margin: 25px 20px auto 30%;'><img src='../static-recourse/img/eseal.png'/></li><li style='margin-top:25px;'><p>电子公章</p><p>是否办理: 否</p></li></ul>"
                         $(".unitInform .printList").append(printInf);
                     }
                 } else {
@@ -228,6 +237,17 @@
                 var he = $(document).height();
                 window.parent.document.getElementById('container').height = he + 70;
                 $(".query").css("height", he);
+
+                //点击核对印章备案号
+                $(".unitInform .printInf .text").click(function(){
+                    var code = $(this).data("code");
+                    var type_code = $(this).data("type");
+                    window.parent.document.getElementById('test').setAttribute("data-code",code);
+                    window.parent.document.getElementById('test').setAttribute("data-type",type_code);
+                    window.parent.document.getElementById('shade').style.display="block";
+                    window.parent.document.getElementById('test').style.display="block";
+                });
+
             });
 
 

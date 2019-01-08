@@ -41,23 +41,23 @@
             <div class="footer-callUs layui-row">
                 <div class="layui-col-md6">
                     <h2>联系我们</h2>
-                    <p>东华宏泰有限公司</p>
+                    <p>东华宏泰科技有限公司 ———— 杭州分公司</p>
                     <p>公司地址：浙江省杭州市滨江区长河路隆和国际8楼</p>
-                    <p>工作时间：周一至周五 8：30-5：30</p>
+                    <p>工作时间：周一至周五 8：30-17：30</p>
                 </div>
                 <div class="layui-col-md2">
-                    <img src="../static-recourse/img/chuanzhen.png" />
+                    <!-- <img src="../static-recourse/img/chuanzhen.png" />
                     <p>传真</p>
-                    <p>0571-81903062</p>
+                    <p>0571-81903062</p> -->
                 </div>
                 <div class="layui-col-md2">
                     <img src="../static-recourse/img/phone.png" />
                     <p>电话</p>
-                    <p>0571-81903062</p>
+                    <p>0571-85220951</p>
                 </div>
                 <div class="layui-col-md2 gongzhonghao">
                     <img src="../static-recourse/img/gongzhonghao.jpg" />
-                    <p>微信公众号</p>
+                    <p>微信小程序</p>
                 </div>
             </div>
             <div class="footer-login layui-row">
@@ -66,11 +66,11 @@
                         <a>印章刻企登录</a>
                         <!-- <a>系统后台登录</a> -->
                     </h4>
-                    <p>
+                    <!-- <p>
                         友情链接：
                         <a target="_blank" href="http://www.hzscjg.gov.cn/">杭州市市场监督管理局</a>
                         <a target="_blank" href="http://www.gzw.xin">公章网</a>
-                    </p>
+                    </p> -->
                     <!-- <div>
                         <a target="_blank" href="http://www.miitbeian.gov.cn/">浙ICP备13033876号-2</a>
                         <img src="../static-recourse/img/jinghui.png">
@@ -83,12 +83,19 @@
             </div>
         </div>
     </div>
+    <div class='shade' id='shade'></div>
+    <div id="test">
+        <p>请输入准确的13位印章编码</p>
+        <input id="input"/>
+        <button class="layui-btn layui-btn-primary" id='cancel'>取消</button> <button class="layui-btn layui-btn-normal" id='sure'>确定</button>
+    </div>
 </body>
 
 </html>
 <script src="../static-recourse/js/jquery.min.js"></script>
 <script src="../static-recourse/layui/layui.js"></script>
 <script src="../static-recourse/js/common.js"></script>
+<script src="../static-recourse/js/config.js"></script>
 <script>
     $(function () {
         $(".menu li").click(function () {
@@ -101,5 +108,42 @@
         $("#onLinePrint").click(function () {
             window.open('http://www.qingning99.cn');
         })
+        //点击确定核对备案号
+        $("#sure").click(function(){
+            var code = $("#test").data("code");
+            var type = $("#test").data("type");
+            var input = $("#input").val();
+            $("body").css("overflow-y","hidden");
+            var url = ip + "portal/checkSealCode";
+            var data = {
+                 "useDepartmentCode": code ,
+                 "sealCode":  input +'"',
+                 "sealTypeCode": '"'+ type +'"'
+                };
+            $.ajax({
+                type: 'POST',
+                async:false,
+                url:url,
+                data:JSON.stringify(data),
+                contentType: "application/json",
+                success:function(res){
+                    if(res.message == "无该枚印章"){
+                        $("#container").contents().find("#text").html("编码错误");
+                        $("#container").contents().find("#text").css("color","red");
+                    }else{
+                        $("#container").contents().find("#text").html("验证成功");
+                    }
+                }
+            });
+            $("body").css("overflow-y","scroll");
+            $(".shade").css("display","none");
+            $("#test").css("display","none");
+        });
+        //点击确定核对备案号
+        $("#cancel").click(function(){
+            $(".shade").css("display","none");
+            $("#test").css("display","none");
+            $("body").css("overflow-y","scroll");
+        });
     });
 </script>

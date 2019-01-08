@@ -168,6 +168,13 @@ body{
 .unitInform .printInf li{
     float: left;
 }
+.unitInform .printInf .eSeal{
+    margin-left: 30%;
+}
+.unitInform .printInf .text{
+    color: #1c66be;
+    cursor: pointer;
+}
 .unitInform span{
     font-size: 12px;
 }

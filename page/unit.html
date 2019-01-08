@@ -120,11 +120,12 @@
     </div>
 
     <script src="../static-recourse/eleTree/layui/layui.js"></script>
+    <script src="../static-recourse/js/config.js"></script>
     <script>
         $(function () {
             window.parent.document.getElementById('container').height = 420;
             //获取区域信息
-            var url = "http://10.0.0.140:8083/portal/districtInfo";
+            var url = ip + "portal/districtInfo";
             var data = getData(url).districtMenus;
             var t_url;
             $(".layui-input").click(function () {
@@ -160,7 +161,7 @@
                     $(".layui-table tbody").empty();
                     $(".ele5").hide();
                     var id = d.data.currentData.districtId;
-                    var t_url = "http://10.0.0.140:8083/portal/makeDepartmentInfo?districtId=" + id;
+                    var t_url = ip + "portal/makeDepartmentInfo?districtId=" + id;
                     t_data = getData(t_url);
                     if(t_data.makeDepartment.length > 0){
                         var tbody = "";
