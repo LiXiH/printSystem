@@ -224,7 +224,7 @@
                             printInf +=
                             "<li><img src='../static-recourse/img/seal.png' style='margin-top: 24px;'/></li><li><p class='information'>印章名称：" +
                             response[i].sealName + "</p>" +
-                            "<p>备案日期：" + moment(response[i].recordDate).format('YYYY-MM-DD') + "</p><p>印章类型："+type+"</p><p>印章编码：<span id='text' class='text' data-type="+response[i].sealTypeCode+" data-code="+response[i].sealCode+"> 点击核对 </span></p>"
+                            "<p>备案日期：" + moment(response[i].recordDate).format('YYYY-MM-DD') + "</p><p>印章类型："+type+"</p><p>印章编码：<span id='text' class='text' data-type="+response[i].sealTypeCode+" data-code="+response[i].useDepartmentCode+"> 点击核对 </span></p>"
                         "</li>"
                         printInf += "<li style='margin: 25px 20px auto 30%;'><img src='../static-recourse/img/eseal.png'/></li><li style='margin-top:25px;'><p>电子公章</p><p>是否办理: 否</p></li></ul>"
                         $(".unitInform .printList").append(printInf);
@@ -242,6 +242,8 @@
                 $(".unitInform .printInf .text").click(function(){
                     var code = $(this).data("code");
                     var type_code = $(this).data("type");
+                    $(".unitInform .printInf .text").removeClass("current");
+                    $(this).addClass("current");
                     window.parent.document.getElementById('test').setAttribute("data-code",code);
                     window.parent.document.getElementById('test').setAttribute("data-type",type_code);
                     window.parent.document.getElementById('shade').style.display="block";

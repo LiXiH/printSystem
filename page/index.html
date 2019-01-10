@@ -35,7 +35,7 @@
             </div>
         </div>
         <div class="container" style="height: 100%;">
-            <iframe src="./home.html" id="container"  width="100%;" frameborder="0" onload="this.height=this.contentWindow.document.body.scrollHeight"></iframe>
+            <iframe src="./home.html" id="container"  width="100%;" frameborder="0" onload="this.height=this.contentWindow.document.body.scrollHeight+20"></iframe>
         </div>
         <div class="footer">
             <div class="footer-callUs layui-row">
@@ -86,7 +86,7 @@
     <div class='shade' id='shade'></div>
     <div id="test">
         <p>请输入准确的13位印章编码</p>
-        <input id="input"/>
+        <input id="input" autocomplete="off"/>
         <button class="layui-btn layui-btn-primary" id='cancel'>取消</button> <button class="layui-btn layui-btn-normal" id='sure'>确定</button>
     </div>
 </body>
@@ -110,15 +110,15 @@
         })
         //点击确定核对备案号
         $("#sure").click(function(){
-            var code = $("#test").data("code");
-            var type = $("#test").data("type");
+            var code = $("#container").contents().find(".current").data("code");
+            var type = $("#container").contents().find(".current").data("type");
             var input = $("#input").val();
             $("body").css("overflow-y","hidden");
             var url = ip + "portal/checkSealCode";
             var data = {
                  "useDepartmentCode": code ,
-                 "sealCode":  input +'"',
-                 "sealTypeCode": '"'+ type +'"'
+                 "sealCode":  input,
+                 "sealTypeCode": type
                 };
             $.ajax({
                 type: 'POST',
@@ -127,11 +127,13 @@
                 data:JSON.stringify(data),
                 contentType: "application/json",
                 success:function(res){
+                    console.log(res);
                     if(res.message == "无该枚印章"){
-                        $("#container").contents().find("#text").html("编码错误");
-                        $("#container").contents().find("#text").css("color","red");
+                        $("#container").contents().find(".current").html("编码错误");
+                        $("#container").contents().find(".current").css("color","red");
                     }else{
-                        $("#container").contents().find("#text").html("验证成功");
+                        $("#container").contents().find(".current").css("color","green");
+                        $("#container").contents().find(".current").html("验证成功");
                     }
                 }
             });
